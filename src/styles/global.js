@@ -32,4 +32,28 @@ export default createGlobalStyle`
   button:hover, a:hover{
     filter: brightness(0.9);
   }
+
+/* Works on Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: ${({ theme }) => theme.COLORS.ORANGE} ${({ theme }) =>
+  theme.COLORS.BACKGROUND_800};
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background-color: ${({ theme }) => theme.COLORS.BACKGROUND_900};
+  border-radius: 20px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: ${({ theme }) => theme.COLORS.ORANGE};
+  border-radius: 20px;
+  border: 3px solid ${({ theme }) => theme.COLORS.BACKGROUND_700};
+}
+
 `
