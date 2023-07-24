@@ -21,7 +21,8 @@ function AuthProvider({ children }) {
       localStorage.setItem("@rocketnotes:token", token)
 
       //passando o token no cabeçalho da pagina, por isso nao passamos no provider
-      api.defaults.headers.authorization = `Bearer ${token}`
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`
+
       setData({ user, token })
     } catch (error) {
       if (error.response) {
@@ -39,6 +40,30 @@ function AuthProvider({ children }) {
     setData({})
   }
 
+  async function updateProfile({ user, avatarFile }) {
+    try {
+      if (avatarFile) {
+        const fileUploadForm = new FormData()
+        fileUploadForm.append("avatar", avatarFile)
+
+        const response = await api.patch("/users/avatar", fileUploadForm)
+        user.avatar = response.data.avatar
+      }
+
+      //fazendo um "update" la na user
+      await api.put("/users", user)
+      //sobrepoe o json do user no local storage
+      localStorage.setItem("@rocketnotes:user", JSON.stringify(user))
+      setData({ user, token: data.token })
+      alert("Perfil atualizado")
+    } catch (error) {
+      if (error.response) {
+        alert(error.response.data.message)
+      } else {
+        alert("Não foi possivel atualiza seus dados!")
+      }
+    }
+  }
   //buscando no local storage se existe usuario e token validado para não deslogar
   useEffect(() => {
     //pegando os valores do token e user do LOCAL STORAGE
@@ -46,7 +71,7 @@ function AuthProvider({ children }) {
     const user = localStorage.getItem("@rocketnotes:user")
 
     if (token && user) {
-      api.defaults.headers.authorization = `Bearer ${token}`
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`
 
       setData({
         token,
@@ -61,6 +86,7 @@ function AuthProvider({ children }) {
       value={{
         signIn,
         signOut,
+        updateProfile,
         user: data.user,
       }}
     >

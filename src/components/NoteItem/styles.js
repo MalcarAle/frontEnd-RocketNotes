@@ -20,11 +20,11 @@ export const Container = styled.div`
     background: none;
   }
 
-  .button-delete{
+  .button-delete {
     color: ${({ theme }) => theme.COLORS.RED};
   }
 
-  .button-add{
+  .button-add {
     color: ${({ theme }) => theme.COLORS.ORANGE};
   }
 
